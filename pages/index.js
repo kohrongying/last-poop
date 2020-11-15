@@ -1,23 +1,62 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import { differenceInCalendarDays } from 'date-fns';
+import 'react-calendar/dist/Calendar.css';
+
+
+function isSameDay(a, b) {
+  return differenceInCalendarDays(a, b) === 0;
+}
+
+const datesToAddClassTo = [new Date(2020,10,12)];
+// yyyy, mm (0 is jan), dd 
+
+function tileClassName({ date, view }) {
+  // Add class to tiles in month view only
+  if (view === 'month') {
+    // Check if a date React-Calendar wants to check is on the list of dates to add class to
+    if (datesToAddClassTo.find(dDate => isSameDay(dDate, date))) {
+      console.log('founded')
+      return 'pooped';
+    } else {
+      console.log(date)
+      console.log('diff', differenceInCalendarDays(date, datesToAddClassTo[0]) )
+    }
+  }
+}
 
 export default function Home() {
+  const [value, setValue] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+
+  function onChange(nextValue) {
+    setDate(nextValue);
+  }
+
   return (
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          LastPoop
         </h1>
 
+
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          Keep track of your poop cycle
         </p>
+
+        <Calendar
+          onChange={onChange}
+          value={date}
+          tileClassName={tileClassName}
+        />
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
