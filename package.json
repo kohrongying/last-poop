@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "aws-sdk": "^2.792.0",
     "date-fns": "^2.16.1",
     "next": "10.0.1",
     "react": "17.0.1",
