@@ -5,8 +5,8 @@ const client = new ddb({
   apiVersion: '2012-08-10',
   region: 'ap-southeast-1',
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    accessKeyId: process.env.AWS_LP_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_LP_SECRET_ACCESS_KEY
   }
 })
 
