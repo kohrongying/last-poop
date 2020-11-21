@@ -14,7 +14,7 @@ const TABLE_NAME = process.env.AWS_DDB_TABLE_NAME
 export const getItem = async (itemId) => {
   const params = {
     TableName: TABLE_NAME,
-    Key: { 'ItemId': itemId}
+    Key: { 'ItemId': itemId }
   }
   return db.get(params).promise()
     .then(data => {
@@ -33,6 +33,20 @@ export const putItem = async (item) => {
   return db.put(params).promise()
     .then(() => {
       return { data: item, status: 201 }
+    })
+    .catch(err => {
+      return { data: err.code, status: err.statusCode }
+    })
+}
+
+export const deleteItem = async (itemId) => {
+  const params = {
+    TableName: TABLE_NAME,
+    Key: { 'ItemId': itemId }
+  }
+  return db.delete(params).promise()
+    .then(() => {
+      return { data: {}, status: 204 }
     })
     .catch(err => {
       return { data: err.code, status: err.statusCode }

@@ -20,7 +20,12 @@ const putFn = jest.fn().mockImplementation(() => ({
   })
 })) 
 
-const deleteFn = jest.fn().mockImplementation(() => ({ promise: awsSdkPromiseResponse }));
+
+const deleteFn = jest.fn().mockImplementation(() => ({
+  promise: jest.fn().mockImplementation(() => {
+    return Promise.resolve({})
+  })
+}))
 
 export class DocumentClient {
   get = getFn 

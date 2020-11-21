@@ -1,5 +1,5 @@
-import { DocumentClient, awsSdkPromiseResponse } from 'aws-sdk/clients/dynamodb';
-import { getItem, putItem } from '../../service/dbClient'
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { getItem, putItem, deleteItem } from '../../service/dbClient'
 
 const db = new DocumentClient();
 
@@ -40,8 +40,22 @@ describe('putItem', () => {
     const response = await putItem(mockItem)
 
     expect(db.put.mock.calls[0][0]).toEqual(expect.objectContaining(mockItem))
-    console.log(db.put.mock.calls)
     expect(response.status).toEqual(201)
     expect(response.data).toEqual(mockItem)
+  })
+})
+
+
+describe('deleteItem', () => {
+  test('should delete item', async () => {
+    const mockItem = {
+      ItemId: '12',
+      DateTime: '2020-11-18T09:57:43.306Z',
+      Event: 'poop'
+    }
+    const response = await deleteItem(mockItem.ItemId)
+
+    expect(db.delete.mock.calls[0][0]).toHaveProperty('Key', { ItemId: mockItem.ItemId })
+    expect(response.status).toEqual(204)
   })
 })
