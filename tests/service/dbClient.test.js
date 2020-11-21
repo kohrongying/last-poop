@@ -39,7 +39,7 @@ describe('putItem', () => {
     }
     const response = await putItem(mockItem)
 
-    expect(db.put.mock.calls[0][0]).toEqual(expect.objectContaining(mockItem))
+    expect(db.put.mock.calls[0][0]).toHaveProperty('Item', mockItem)
     expect(response.status).toEqual(201)
     expect(response.data).toEqual(mockItem)
   })

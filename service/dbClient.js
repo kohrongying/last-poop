@@ -28,14 +28,14 @@ export const getItem = async (UserId) => {
 export const putItem = async (item) => {
   const params = {
     TableName: TABLE_NAME,
-    ...item,
+    Item: item,
   }
   return db.put(params).promise()
     .then(() => {
       return { data: item, status: 201 }
     })
     .catch(err => {
-      return { data: err.code, status: err.statusCode }
+      return { data: err.code, status: 400 }
     })
 }
 
@@ -59,7 +59,7 @@ export const queryItems = async (startDate, endDate) => {
     ExpressionAttributeValues: {
       ':start': startDate,
       ':end': endDate,
-      ':user': 1
+      ':user': '1'
     },
     KeyConditionExpression: 'UserId = :user',
     FilterExpression: 'CreatedAt between :start and :end'
