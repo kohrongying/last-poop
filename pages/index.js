@@ -1,32 +1,41 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import { differenceInCalendarDays } from 'date-fns';
+import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import 'react-calendar/dist/Calendar.css';
+import api from '../service/apiClient'
 
 function isSameDay(a, b) {
   return differenceInCalendarDays(a, b) === 0;
 }
 
-const datesToAddClassTo = [new Date(2020,10,12)];
-// yyyy, mm (0 is jan), dd 
-
-function tileClassName({ date, view }) {
-  if (view === 'month') {
-
-    if (datesToAddClassTo.find(dDate => isSameDay(dDate, date))) {
-      return 'pooped';
-    }
-  }
-}
-
 export default function Home() {
-  const [value, setValue] = useState(new Date());
+  const [eventDates, setEventDates] = useState([])
   const [date, setDate] = useState(new Date());
 
-  function onChange(nextValue) {
+  useEffect(() => {
+    refreshDates()
+  }, [])
+
+  const refreshDates =  async () => {
+    const response = await api.getItems('2020-11-01', '20202-11-30')
+    setEventDates(response.map(x => parseISO(x.CreatedAt)))
+  }
+
+  const onChange = async (nextValue) => {
+    await api.putItem(nextValue)
+    refreshDates()
     setDate(nextValue);
+  }
+
+  const tileClassName = ({ date, view }) => {
+    if (view === 'month') {
+
+      if (eventDates.find(dDate => isSameDay(dDate, date))) {
+        return 'pooped';
+      }
+    }
   }
 
   return (
