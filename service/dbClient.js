@@ -11,21 +11,18 @@ const db = new DocumentClient({
 
 const TABLE_NAME = process.env.AWS_DDB_TABLE_NAME
 
-const RESPONSE = {
-  NOT_FOUND: { data: 'NOT FOUND', status: 404 },
-  INTERNAL_ERROR: { data: 'INTERNAL ERROR', status: 500 }
-}
-
 export const getItem = async (itemId) => {
   const params = {
     TableName: TABLE_NAME,
     Key: { 'ItemId': itemId}
   }
-  const response = await db.get(params).promise()
-  if (response?.Item) {
-    return { data: response.Item, status: 200 }
-  }
-  return RESPONSE.NOT_FOUND
+  return db.get(params).promise()
+    .then(data => {
+      return { data: data.Item, status: 200 }
+    })
+    .catch(err => {
+      return { data: err.code, status: err.statusCode }
+    })
 }
 
 export const putItem = async (item) => {
@@ -33,9 +30,11 @@ export const putItem = async (item) => {
     TableName: TABLE_NAME,
     ...item,
   }
-  const response = await db.put(params).promise()
-  if (response?.Item) {
-    return { data: response.Item, status: 201 }
-  }
-  return RESPONSE.INTERNAL_ERROR
+  return db.put(params).promise()
+    .then(() => {
+      return { data: item, status: 200 }
+    })
+    .catch(err => {
+      return { data: err.code, status: err.statusCode }
+    })
 }
