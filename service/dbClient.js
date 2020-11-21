@@ -11,10 +11,10 @@ const db = new DocumentClient({
 
 const TABLE_NAME = process.env.AWS_DDB_TABLE_NAME
 
-export const getItem = async (itemId) => {
+export const getItem = async (UserId) => {
   const params = {
     TableName: TABLE_NAME,
-    Key: { 'ItemId': itemId }
+    Key: { 'UserId': UserId }
   }
   return db.get(params).promise()
     .then(data => {
@@ -39,10 +39,10 @@ export const putItem = async (item) => {
     })
 }
 
-export const deleteItem = async (itemId) => {
+export const deleteItem = async (UserId) => {
   const params = {
     TableName: TABLE_NAME,
-    Key: { 'ItemId': itemId }
+    Key: { 'UserId': UserId }
   }
   return db.delete(params).promise()
     .then(() => {
