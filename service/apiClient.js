@@ -10,6 +10,7 @@ const api = {
     const body = {
       UserId: '1',
       Event: 'P',
+      EventDate: createdAt,
       CreatedAt: createdAt
     }
     const response = await axios.post('/api/item', body)
