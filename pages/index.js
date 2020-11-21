@@ -6,7 +6,7 @@ import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import 'react-calendar/dist/Calendar.css';
 import api from '../service/apiClient'
 
-function isSameDay(a, b) {
+const isSameDay = (a, b) => {
   return differenceInCalendarDays(a, b) === 0;
 }
 
@@ -19,12 +19,18 @@ export default function Home() {
   }, [])
 
   const refreshDates =  async () => {
+    //TODO fix hardcode of month start/end dates
     const response = await api.getItems('2020-11-01', '20202-11-30')
     setEventDates(response.map(x => parseISO(x.CreatedAt)))
+    console.log(eventDates)
   }
 
   const onChange = async (nextValue) => {
-    await api.putItem(nextValue)
+    if (eventDates.find(dDate => isSameDay(dDate, nextValue))) {
+      await api.deleteItem(nextValue.toISOString())
+    } else {
+      await api.putItem(nextValue)
+    }
     refreshDates()
     setDate(nextValue);
   }

@@ -15,6 +15,11 @@ const api = {
     }
     const response = await axios.post('/api/item', body)
     return response.data
+  },
+
+  deleteItem: async (createdAt) => {
+    const response = await axios.delete(`/api/item?createdAt=${createdAt}`)
+    return response.data
   }
 }
 

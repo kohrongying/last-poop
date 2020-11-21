@@ -1,4 +1,4 @@
-import { getItem, putItem, deleteItem, queryItems } from '../../service/dbClient'
+import { putItem, deleteItem, queryItems } from '../../service/dbClient'
 
 export default (req, res) => {
   switch (req.method) {
@@ -18,9 +18,14 @@ export default (req, res) => {
         })
       break;
     }
-    // case 'DELETE': {
-    //   deleteItem(req)
-    // }
+    case 'DELETE': {
+      const createdAt = req.query.createdAt;
+      deleteItem(createdAt)
+        .then(response => {
+          res.status(response.status).json(response.data)
+        })
+      break;
+    }
     default:
       res.json({ data: 'hello world' })
   }
