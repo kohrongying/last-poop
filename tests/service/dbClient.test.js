@@ -26,7 +26,7 @@ describe('getItem', () => {
 
     expect(db.get.mock.calls[0][0]).toHaveProperty('Key', { ItemId: 'abc' })
     expect(response.status).toEqual(400)
-    expect(response.code).toEqual('ValidationException')
+    expect(response.data).toEqual('ValidationException')
   })
 })
 
@@ -37,9 +37,10 @@ describe('putItem', () => {
       DateTime: '2020-11-18T09:57:43.306Z',
       Event: 'poop'
     }
-    awsSdkPromiseResponse.mockReturnValueOnce({ Item: mockItem })
     const response = await putItem(mockItem)
-    expect(db.put).toHaveBeenCalledWith(mockItem)
+
+    expect(db.put.mock.calls[0][0]).toEqual(expect.objectContaining(mockItem))
+    console.log(db.put.mock.calls)
     expect(response.status).toEqual(201)
     expect(response.data).toEqual(mockItem)
   })

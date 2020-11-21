@@ -32,7 +32,7 @@ export const putItem = async (item) => {
   }
   return db.put(params).promise()
     .then(() => {
-      return { data: item, status: 200 }
+      return { data: item, status: 201 }
     })
     .catch(err => {
       return { data: err.code, status: err.statusCode }
