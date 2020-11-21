@@ -1,22 +1,8 @@
-const mockItem = {
-  UserId: '1',
-  CreatedAt: '2020-11-15T09:57:43.306Z',
-  Event: 'poop'
-}
-
-const mockItems = [{
-  UserId: '12',
-  CreatedAt: '2020-11-18T09:57:43.306Z',
-  Event: 'poop'
-},{
-  UserId: '12',
-  CreatedAt: '2020-11-18T09:57:43.306Z',
-  Event: 'poop'
-}]
+import { mockItem, mockItems } from '../../../tests/constants/item'
 
 const getFn = jest.fn().mockImplementation((request) => ({
   promise: jest.fn().mockImplementation(() => {
-    if (request.Key.UserId === '1') {
+    if (request.Key.EventDate === mockItem.EventDate) {
       return Promise.resolve({ Item: mockItem })
     } else {
       return Promise.reject({ statusCode: 400, code: 'ValidationException'})

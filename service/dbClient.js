@@ -1,5 +1,7 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
+const USER_ID = '1'
+
 const db = new DocumentClient({
   apiVersion: '2012-08-10',
   region: 'ap-southeast-1',
@@ -11,10 +13,13 @@ const db = new DocumentClient({
 
 const TABLE_NAME = process.env.AWS_DDB_TABLE_NAME
 
-export const getItem = async (UserId) => {
+export const getItem = async (eventDate) => {
   const params = {
     TableName: TABLE_NAME,
-    Key: { 'UserId': UserId }
+    Key: { 
+      'UserId': USER_ID,
+      'EventDate': eventDate
+    }
   }
   return db.get(params).promise()
     .then(data => {
@@ -39,10 +44,13 @@ export const putItem = async (item) => {
     })
 }
 
-export const deleteItem = async (UserId) => {
+export const deleteItem = async (eventDate) => {
   const params = {
     TableName: TABLE_NAME,
-    Key: { 'UserId': UserId }
+    Key: { 
+      'UserId': USER_ID,
+      'EventDate': eventDate
+    }
   }
   return db.delete(params).promise()
     .then(() => {
@@ -59,7 +67,7 @@ export const queryItems = async (startDate, endDate) => {
     ExpressionAttributeValues: {
       ':start': startDate,
       ':end': endDate,
-      ':user': '1'
+      ':user': USER_ID
     },
     KeyConditionExpression: 'UserId = :user',
     FilterExpression: 'CreatedAt between :start and :end'
