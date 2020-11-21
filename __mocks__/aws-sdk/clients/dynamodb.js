@@ -4,6 +4,16 @@ const mockItem = {
   Event: 'poop'
 }
 
+const mockItems = [{
+  ItemId: '12',
+  DateTime: '2020-11-18T09:57:43.306Z',
+  Event: 'poop'
+},{
+  ItemId: '12',
+  DateTime: '2020-11-18T09:57:43.306Z',
+  Event: 'poop'
+}]
+
 const getFn = jest.fn().mockImplementation((request) => ({
   promise: jest.fn().mockImplementation(() => {
     if (request.Key.ItemId === '1') {
@@ -27,8 +37,15 @@ const deleteFn = jest.fn().mockImplementation(() => ({
   })
 }))
 
+const queryFn = jest.fn().mockImplementation(() => ({
+  promise: jest.fn().mockImplementation(() => {
+    return Promise.resolve({ Items: mockItems })
+  })
+}))
+
 export class DocumentClient {
   get = getFn 
   put = putFn;
   delete = deleteFn;
+  query = queryFn;
 }

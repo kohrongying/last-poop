@@ -1,5 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { getItem, putItem, deleteItem } from '../../service/dbClient'
+import { getItem, putItem, deleteItem, queryItems } from '../../service/dbClient'
 
 const db = new DocumentClient();
 
@@ -57,5 +57,16 @@ describe('deleteItem', () => {
 
     expect(db.delete.mock.calls[0][0]).toHaveProperty('Key', { ItemId: mockItem.ItemId })
     expect(response.status).toEqual(204)
+  })
+})
+
+describe('queryItems by month', () => {
+  test('should return list of item', async () => {
+    const startDate = '2020-11-01'
+    const endDate = '2020-11-30'
+    const response = await queryItems(startDate, endDate)
+
+    expect(response.status).toEqual(200)
+    expect(response.data.length).toEqual(2)
   })
 })

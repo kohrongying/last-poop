@@ -52,3 +52,23 @@ export const deleteItem = async (itemId) => {
       return { data: err.code, status: err.statusCode }
     })
 }
+
+export const queryItems = async (startDate, endDate) => {
+  const params = {
+    TableName: TABLE_NAME,
+    ExpressionAttributeValues: {
+      ':start': startDate,
+      ':end': endDate,
+      ':user': 1
+    },
+    KeyConditionExpression: 'UserId = :user',
+    FilterExpression: 'CreatedAt between :start and :end'
+  }
+  return db.query(params).promise()
+    .then(data => {
+      return { data: data.Items, status: 200 }
+    })
+    .catch(err => {
+      return { data: err.code, status: err.statusCode }
+    })
+}
