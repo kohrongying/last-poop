@@ -12,7 +12,8 @@ const db = new DocumentClient({
 const TABLE_NAME = process.env.AWS_DDB_TABLE_NAME
 
 const RESPONSE = {
-  NOT_FOUND: { data: 'NOT FOUND', status: 404 }
+  NOT_FOUND: { data: 'NOT FOUND', status: 404 },
+  INTERNAL_ERROR: { data: 'INTERNAL ERROR', status: 500 }
 }
 
 export const getItem = async (itemId) => {
@@ -25,4 +26,16 @@ export const getItem = async (itemId) => {
     return { data: response.Item, status: 200 }
   }
   return RESPONSE.NOT_FOUND
+}
+
+export const putItem = async (item) => {
+  const params = {
+    TableName: TABLE_NAME,
+    ...item,
+  }
+  const response = await db.put(params).promise()
+  if (response?.Item) {
+    return { data: response.Item, status: 201 }
+  }
+  return RESPONSE.INTERNAL_ERROR
 }
