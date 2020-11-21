@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import { differenceInCalendarDays, parseISO, format } from 'date-fns';
+import { differenceInCalendarDays, parseISO, startOfMonth, endOfMonth } from 'date-fns';
 import 'react-calendar/dist/Calendar.css';
 import api from '../service/apiClient'
 
@@ -12,17 +12,17 @@ const isSameDay = (a, b) => {
 
 export default function Home() {
   const [eventDates, setEventDates] = useState([])
-  const [date, setDate] = useState(new Date());
+  const [activeStartDate, setActiveStartDate] = useState(new Date())
 
   useEffect(() => {
-    refreshDates()
+    refreshDates(activeStartDate)
   }, [])
 
-  const refreshDates =  async () => {
-    //TODO fix hardcode of month start/end dates
-    const response = await api.getItems('2020-11-01', '20202-11-30')
+  const refreshDates =  async (activeStartDate) => {
+    const startDate = startOfMonth(activeStartDate).toISOString()
+    const endDate = endOfMonth(activeStartDate).toISOString()
+    const response = await api.getItems(startDate, endDate)
     setEventDates(response.map(x => parseISO(x.CreatedAt)))
-    console.log(eventDates)
   }
 
   const onChange = async (nextValue) => {
@@ -31,13 +31,16 @@ export default function Home() {
     } else {
       await api.putItem(nextValue)
     }
-    refreshDates()
-    setDate(nextValue);
+    refreshDates(activeStartDate)
+  }
+
+  const onActiveStartDateChange = ({ activeStartDate }) => {
+    setActiveStartDate(activeStartDate)
+    refreshDates(activeStartDate)
   }
 
   const tileClassName = ({ date, view }) => {
     if (view === 'month') {
-
       if (eventDates.find(dDate => isSameDay(dDate, date))) {
         return 'pooped';
       }
@@ -61,8 +64,9 @@ export default function Home() {
         </p>
 
         <Calendar
+          onActiveStartDateChange={onActiveStartDateChange}
+          view="month"
           onChange={onChange}
-          value={date}
           tileClassName={tileClassName}
         />
       </main>
