@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: #FEF3C7;
 }
 
 a {
@@ -16,7 +17,7 @@ a {
 }
 
 .pooped {
-  background-color: red!important;
+  background-color: #B45309!important;
 }
 
 .react-calendar {
@@ -31,4 +32,8 @@ a {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif!important;
     
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: black;
 }
