@@ -3,7 +3,6 @@ import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { differenceInCalendarDays, parseISO, startOfMonth, endOfMonth } from 'date-fns';
-import 'react-calendar/dist/Calendar.css';
 import api from '../service/apiClient'
 
 const isSameDay = (a, b) => {
