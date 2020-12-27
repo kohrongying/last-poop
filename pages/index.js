@@ -3,7 +3,7 @@ import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { differenceInCalendarDays, parseISO, startOfMonth, endOfMonth } from 'date-fns';
-import api from '../service/apiClient'
+import { putItem, deleteItem, queryItems } from '../service/dbClient'
 
 const isSameDay = (a, b) => {
   return differenceInCalendarDays(a, b) === 0;
@@ -20,15 +20,20 @@ export default function Home() {
   const refreshDates =  async (activeStartDate) => {
     const startDate = startOfMonth(activeStartDate).toISOString()
     const endDate = endOfMonth(activeStartDate).toISOString()
-    const response = await api.getItems(startDate, endDate)
+    const response = (await queryItems(startDate, endDate)).data
     setEventDates(response.map(x => parseISO(x.CreatedAt)))
   }
 
   const onChange = async (nextValue) => {
     if (eventDates.find(dDate => isSameDay(dDate, nextValue))) {
-      await api.deleteItem(nextValue.toISOString())
+      await deleteItem(nextValue.toISOString())
     } else {
-      await api.putItem(nextValue)
+      await putItem({
+        UserId: '1',
+        Event: 'P',
+        EventDate: nextValue.toISOString(),
+        CreatedAt: nextValue.toISOString()
+      })
     }
     refreshDates(activeStartDate)
   }
