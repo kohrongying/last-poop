@@ -27,8 +27,6 @@ resource "aws_iam_user_policy" "dev_policy" {
 EOF
 }
 
-
-# use on first create only
 resource "aws_iam_access_key" "dev" {
   user    = aws_iam_user.dev.name
 }

@@ -6,12 +6,12 @@ const db = new DocumentClient({
   apiVersion: '2012-08-10',
   region: 'ap-southeast-1',
   credentials: {
-    accessKeyId: process.env.AWS_LP_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_LP_SECRET_ACCESS_KEY
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_LP_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_LP_SECRET_ACCESS_KEY
   }
 })
 
-const TABLE_NAME = process.env.AWS_DDB_TABLE_NAME
+const TABLE_NAME = process.env.NEXT_PUBLIC_AWS_DDB_TABLE_NAME
 
 export const getItem = async (eventDate) => {
   const params = {
