@@ -1,15 +1,18 @@
 resource "aws_dynamodb_table" "basic-dynamodb-table" {
   name           = "last-poop-dev"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "ItemId"
-  range_key      = "DateTime"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 20
+  write_capacity = 10
+  hash_key       = "UserId"
+  range_key      = "EventDate"
+  
   attribute {
-    name = "ItemId"
+    name = "UserId"
     type = "S"
   }
 
   attribute {
-    name = "DateTime"
+    name = "EventDate"
     type = "S"
   }
 
